@@ -7,7 +7,7 @@ class Balle {
     p= new PVector(x, y);
     v= new PVector();
     r=height/(3*tailleY);
-    v= PVector.fromAngle(a).mult(r/3);
+    v= PVector.fromAngle(a).mult(r/2);
     collante = true;
     dx=0;
   }
@@ -37,9 +37,11 @@ class Balle {
     float d = PVector.sub(p, pv).mag()-r;
     if (d<0) {
       if (int(pv.x)==int(ra.x-ra.l/2) || int(pv.x)==int(ra.x+ra.l/2)) v.x=-v.x;
-      if (int(pv.y)==int(ra.y) || int(pv.y)==int(ra.y+ra.h)) v.y=-v.y;
+      if (int(pv.y)==int(ra.y) || int(pv.y)==int(ra.y+ra.h)) {
+        v.y=-v.y;
+        v.rotate(1.5*(pv.x-ra.x)/ra.l);
+      }
       p.sub(v.copy().limit(1).mult(d));
-
       if (ra.collante) {
          collante=true;
          dx=p.x-ra.x;
