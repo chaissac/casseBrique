@@ -1,7 +1,7 @@
 class Balle {
   PVector p, v;
   float r;
-  boolean collante;
+  boolean collante,noire;
   float dx;
   public Balle(float x, float y, float a) {
     p= new PVector(x, y);
@@ -9,11 +9,12 @@ class Balle {
     r=height/(3*tailleY);
     v= PVector.fromAngle(a).mult(r/2);
     collante = true;
+    noire=false;
     dx=0;
   }
   public void trace() {
     noStroke();
-    fill(255);
+    fill(noire?#F04000:#FFFFFF);
     ellipse(p.x, p.y, r, r);
   }
   public boolean bouge(Raquette ra) {
@@ -41,10 +42,10 @@ class Balle {
         v.y=-v.y;
         v.rotate(1.5*(pv.x-ra.x)/ra.l);
       }
-      p.sub(v.copy().limit(1).mult(d));
+      //p.sub(v.copy().limit(1).mult(d));
       if (ra.collante) {
-         collante=true;
-         dx=p.x-ra.x;
+        collante=true;
+        dx=p.x-ra.x;
       }
       return true;
     }
@@ -55,9 +56,11 @@ class Balle {
     PVector pv = new PVector(min(max(p.x, br.pos.x), br.pos.x+br.l), min(max(p.y, br.pos.y), br.pos.y+br.h));
     float d = PVector.sub(p, pv).mag()-r;
     if (d<0) {
-      if (int(pv.x)==int(br.pos.x) || int(pv.x)==int(br.pos.x+br.l)) v.x=-v.x;
-      if (int(pv.y)==int(br.pos.y) || int(pv.y)==int(br.pos.y+br.h)) v.y=-v.y;
-      p.sub(v.copy().limit(1).mult(d));
+      if (!noire) {
+        if (int(pv.x)==int(br.pos.x) || int(pv.x)==int(br.pos.x+br.l)) v.x=-v.x;
+        if (int(pv.y)==int(br.pos.y) || int(pv.y)==int(br.pos.y+br.h)) v.y=-v.y;
+        p.sub(v.copy().limit(1).mult(d));
+      }
       br.hit();
       return true;
     }

@@ -2,8 +2,8 @@ class Brique {
   PVector pos;
   int t, hit;
   float h, l;
-  int[] hits = {1,1,1,1, 1, 1, 1, 1};
-  color[] col = {#00D000, #909090, #B0B000, #D0A000, #2020D0, #20D020, #D020D0, #F0F0F0}; 
+  int[] hits = {-2,3,1,1, 1, 1, 1, 1};
+  color[] col = {#F0F000, #FFFFFF, #B0B000, #D0A000, #2020D0, #20D020, #D020D0, #F000F0}; 
   public Brique(int _x, int _y, int _t) {
     l = (width*.90)/tailleX;
     h = (height*.90)/tailleY;
@@ -13,15 +13,17 @@ class Brique {
     t = constrain(_t, 0, 7);
     hit = hits[t];
   }
-  public void trace() {
+  public boolean trace() {
     if (hit!=0) {
       noStroke();
-      fill(col[t], 255-hit*85);
+      fill(col[t]);
       rect(pos.x, pos.y, l, h);
     }
+    return (hit!=0);
   }
   public void hit() {
     hit--;
+    if (hit==0 && random(100)<20) bonus.add(new Bonus(pos.x,pos.y));
     if (hit==-1) hit=0;
   }
 }
